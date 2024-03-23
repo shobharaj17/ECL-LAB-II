@@ -1,0 +1,35 @@
+clc;
+clear all;
+close all;
+n=7;
+k=4;
+M=[0 0 0 0;0 0 0 1;0 0 1 0;0 0 1 1;0 1 0 0;0 1 0 1;0 1 1 0;0 1 1 1];
+disp('message');
+disp(M);
+p=[1 0 1;0 1 0; 1 0 0;1 1 0];
+display('parity');
+disp(p);
+G=[[p],eye(k)];
+display('generator matrix');
+disp(G);
+c=encode(M,n,k,'linear frnt',G);
+c=rem(M*G,2);
+disp(c);
+H=[eye(n-k),[p]'];
+display('parity check,matrix');
+disp(H);
+display('error');
+e=randerr(8,n);
+display('received matrix');
+r=rem(plus(c,e),2);
+disp(r);
+display('syndrome error');
+e=rem(r*H',2);
+disp(e);
+disp('decoding table');
+t=syndtable(H);
+disp(t);
+[msg,err,cc]=decode(r,n,k,'linear frnt',G,t)
+disp('decoded message');
+disp(cc);
+
